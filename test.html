@@ -1,34 +1,58 @@
-<body></body>
+<body>
 <div id="root">
     
     <p>The value of the input is: {{ message }}</p>
+    <h2>Entourage</h2>
     <ul>
-        <li v-for="name in names" v-text="name">
+        <li v-for="person in people">
+            {{ person.name }}
+            <input type="checkbox" v-model="person.family">
+        </li>
+    </ul>
 
+    <h2>Relatives</h2>
+    <ul>
+        <li v-for="person in relatives" v-text="person.name">
         </li>
     </ul>
     <input type="text" id="input" v-model="newName">
-    <button id="button" v-on:click="addName">Add Name</button>
+    <button id="button" :disabled="timer%2 == 1">{{ timer }}</button>
 </div>
 
 <script src="https://unpkg.com/vue@2.6.11/dist/vue.js"></script>
 
 <script>
 
-    new Vue({
+    var app = new Vue({
         el: '#root',
         data:{
             newName: '',
             message: "Hello Roch!",
-            names: ['Joe', 'Roch', 'Cedric']
+            people: [
+                {name: 'Chris', family: false},
+                {name: 'Cedric', family: true},
+                {name: 'Amelie', family: false},
+                {name: 'Jade', family: true},
+                {name: 'Estelle', family: false},
+            ],
+            timer: 0
+        },
+        computed: {
+            relatives(){
+                return this.people.filter(person => person.family)
+            }
         },
         methods: {
             addName(){
-                this.names.push(this.newName);
+                this.people.push(this.newName);
+            },
+            incrementCount(){
+                this.timer += 1;
             }
-        }
+        }   
         
     })
+    window.setInterval(app.incrementCount, 1000)
 </script>
 
 </body>
