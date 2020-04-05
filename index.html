@@ -1,13 +1,27 @@
 <html>
 <title></title>
 <head>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/1.11.8/semantic.min.css"/>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/1.11.8/semantic.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.0/css/bulma.min.css">
+    <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
 </head>
 <body>
     <div id="root">
-        <people></people>
+        <button @click="showModal = true" >Show Status Modal</button>
+        <modal v-show="showModal == true" :title="modalTitle" @close="showModal = false">{{modalTitle}}</modal>
+        <input type="text" name="name" v-model="newPerson.name">
+        <input type="text" name="description" v-model="newPerson.description">
+        <input type="checkbox" name="family" v-model="newPerson.family">
+        <button @click="addTab(newPerson)" class="is-success">Add</button>
+
+        <tabs>
+            <tab 
+                v-for="(person, index) in relations" 
+                :name="person.name"
+                :selected="index == 0"
+            >
+                {{ person.description }}
+            </tab>
+        </tabs>
 
     </div>
 
