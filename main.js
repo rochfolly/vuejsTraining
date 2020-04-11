@@ -1,3 +1,17 @@
+window.Event = new class{
+    constructor(){
+        this.vue = new Vue();
+    }
+
+    fire(event, data = null){
+        this.vue.$emit(event, data)
+    }
+
+    listen(event, callback){
+        this.vue.$on(event, callback)
+    }
+}
+
 Vue.component('tab', {
     props: { 
         name: { required: true },
@@ -69,6 +83,36 @@ Vue.component('modal', {
         </div>
     </div>
     `,
+})
+
+Vue.component('temple', {
+    props: { index: Number },
+    template: `
+    <div @click=emitChange() style="border-radius: 100%; width: 200px; height: 200px; background-color:red;" >
+    {{ styled }}
+    </div>
+    `,
+    data() {
+        return {
+            target: this.index,
+            colors: ['blue', 'green', 'red', 'yellow', 'brown']
+        }
+    },
+    computed: {
+            styled() {
+                return "border-radius: 100%; width: 200px; height: 200px; background-color:" + this.colors[this.target]  + ";"
+            } 
+    },
+    created(){
+        Event.listen('click', () => {
+            this.target = this.target == 4 ? 0 : this.target+1
+        })
+    },
+    methods: {
+        emitChange(){
+            Event.fire('click')
+        }
+    }
 })
 
 new Vue({
